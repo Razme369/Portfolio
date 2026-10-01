@@ -84,7 +84,7 @@ function Contact() {
 
             <a
               className="contact-link"
-              href="https://github.com/YOUR_USERNAME"
+              href="https://github.com/Razme369"
               target="_blank"
               rel="noopener noreferrer"
             >
