@@ -12,7 +12,30 @@ function About() {
 
       <div className="about-content">
 
-        <h3>Mohammed Rasmil</h3>
+        {/* Profile Image */}
+        <div className="about-profile">
+          <img
+            src="/profile.jpg"
+            alt="Mohammed Rasmil Poovan Kulam"
+            className="about-profile-image"
+          />
+
+          <h3>Mohammed Rasmil</h3>
+
+          <p className="about-role">
+            Software Engineering Technology Student
+          </p>
+
+          {/* Résumé PDF Link */}
+          <a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="resume-button"
+          >
+            View My Résumé
+          </a>
+        </div>
 
         <p>
           I am a Software Engineering Technology student at Centennial

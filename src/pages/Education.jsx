@@ -3,8 +3,6 @@ function Education() {
     <div className="education-page">
 
       <div className="education-header">
-        
-
         <h1>EDUCATION</h1>
 
         <h2>Building a Foundation in Software & Automation</h2>
@@ -12,10 +10,20 @@ function Education() {
 
       <div className="education-content">
 
+        {/* Software Engineering Education */}
         <div className="education-section">
           <h3>Centennial College</h3>
 
           <h4>Software Engineering Technician</h4>
+
+          <p>
+            <strong>Study Period:</strong> May 2024 – Present
+          </p>
+
+          <p>
+            <strong>Qualification Status:</strong>{" "}
+            <span className="education-status">In Progress</span>
+          </p>
 
           <p>
             Currently studying Software Engineering Technology at Centennial
@@ -37,8 +45,20 @@ function Education() {
           </ul>
         </div>
 
+        {/* Robotics Education */}
         <div className="education-section">
-          <h3>Electromechanical Engineering Technician – Robotics</h3>
+          <h3>Centennial College</h3>
+
+          <h4>Electromechanical Engineering Technician – Robotics</h4>
+
+          <p>
+            <strong>Study Period:</strong> January 2017 – December 2019
+          </p>
+
+          <p>
+            <strong>Qualification Status:</strong>{" "}
+            <span className="education-status">Completed</span>
+          </p>
 
           <p>
             My previous technical education focused on robotics,
