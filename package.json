@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
+  "start": "node server.js",
+  "server": "nodemon server.js",
+  "client": "vite",
+  "dev": "concurrently \"npm run server\" \"npm run client\""
+},
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
