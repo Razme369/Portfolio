@@ -30,3 +30,12 @@ const authMiddleware = (req, res, next) => {
 };
 
 export default authMiddleware;
+export const authorizeAdmin = (req, res, next) => {
+  if (!req.user || req.user.role !== "admin") {
+    return res.status(403).json({
+      message: "Access denied. Administrator privileges required."
+    });
+  }
+
+  next();
+};

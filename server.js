@@ -10,11 +10,17 @@ import qualificationRoutes from "./routes/qualificationRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
+console.log(
+  "JWT secret loaded:",
+  Boolean(process.env.JWT_SECRET)
+);
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+
 app.use("/api/contacts", contactRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/qualifications", qualificationRoutes);

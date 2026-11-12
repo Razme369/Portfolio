@@ -3,11 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
+ "scripts": {
   "start": "node server.js",
   "server": "nodemon server.js",
   "client": "vite",
-  "dev": "concurrently \"npm run server\" \"npm run client\""
+  "dev": "concurrently \"npm run server\" \"npm run client\"",
+  "seed:admin": "node seedAdmin.js"
 },
   "dependencies": {
     "bcryptjs": "^3.0.3",

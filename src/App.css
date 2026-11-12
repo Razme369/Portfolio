@@ -1338,7 +1338,7 @@ nav a:hover {
   border: 1px solid var(--gold, #c9a45c);
   border-radius: 6px;
   background: var(--paper, #fff);
-  color: inherit;
+  color: #000;
   font: inherit;
 }
 
@@ -1452,4 +1452,7 @@ nav a:hover {
     max-width: 240px;
     text-align: center;
   }
+}
+.nav-welcome {
+  color: white;
 }

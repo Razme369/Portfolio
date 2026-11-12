@@ -1,13 +1,7 @@
 
-
-
-
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 function Contact() {
-  const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -15,6 +9,10 @@ function Contact() {
     email: "",
     message: "",
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -25,15 +23,48 @@ function Contact() {
     }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    // Capture the submitted values for this assignment.
-    console.log("Contact form submitted:", formData);
+    setIsSubmitting(true);
+    setStatusMessage("");
+    setErrorMessage("");
 
-    alert("Thank you! Your contact form has been submitted.");
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/contacts/submit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
-    navigate("/");
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Unable to submit your message.");
+      }
+
+      setStatusMessage("Thank you! Your message has been submitted successfully.");
+
+      setFormData({
+        firstName: "",
+        lastName: "",
+        contactNumber: "",
+        email: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error("Contact form error:", error);
+      setErrorMessage(
+        error.message || "Something went wrong. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -187,8 +218,20 @@ function Contact() {
             />
           </div>
 
-          <button type="submit" className="contact-submit-button">
-            Submit Message
+          {statusMessage && (
+            <p role="status">{statusMessage}</p>
+          )}
+
+          {errorMessage && (
+            <p role="alert">{errorMessage}</p>
+          )}
+
+          <button
+            type="submit"
+            className="contact-submit-button"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Submit Message"}
           </button>
         </form>
       </div>

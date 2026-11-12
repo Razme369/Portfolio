@@ -1,19 +1,22 @@
 
 import express from "express";
 import bcrypt from "bcryptjs";
-import User from "../models/User.js";
 import jwt from "jsonwebtoken";
-import authMiddleware from "../middleware/authMiddleware.js";
+import User from "../models/User.js";
+
+import authMiddleware, {
+  authorizeAdmin,
+} from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// GET all users (never return passwords)
-router.get("/", authMiddleware, async (req, res) =>  {
+// GET all users (admin only)
+router.get("/", authMiddleware, authorizeAdmin, async (req, res) => {
   try {
     const users = await User.find().select("-password");
     res.json(users);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Unable to retrieve users." });
   }
 });
 
@@ -24,7 +27,7 @@ router.post("/register", async (req, res) => {
 
     if (!name || !email || !password) {
       return res.status(400).json({
-        message: "Name, email, and password are required",
+        message: "Name, email, and password are required.",
       });
     }
 
@@ -32,7 +35,7 @@ router.post("/register", async (req, res) => {
 
     if (existingUser) {
       return res.status(409).json({
-        message: "Email is already registered",
+        message: "Email is already registered.",
       });
     }
 
@@ -42,30 +45,35 @@ router.post("/register", async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      // Never accept an admin role from public registration.
+      role: "user",
     });
 
     res.status(201).json({
-      message: "User registered successfully",
+      message: "User registered successfully.",
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
     });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error("Registration error:", error);
+    res.status(500).json({
+      message: "Registration failed.",
+    });
   }
 });
 
-
- // POST login
+// POST login
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
-        message: "Email and password are required",
+        message: "Email and password are required.",
       });
     }
 
@@ -73,7 +81,7 @@ router.post("/login", async (req, res) => {
 
     if (!user) {
       return res.status(401).json({
-        message: "Invalid email or password",
+        message: "Invalid email or password.",
       });
     }
 
@@ -84,35 +92,38 @@ router.post("/login", async (req, res) => {
 
     if (!passwordMatch) {
       return res.status(401).json({
-        message: "Invalid email or password",
+        message: "Invalid email or password.",
       });
     }
 
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
+      {
+        userId: user._id.toString(),
+        email: user.email,
+        role: user.role || "user",
+      },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
     res.json({
-      message: "Login successful",
+      message: "Login successful.",
       token,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role || "user",
       },
     });
- } catch (error) {
-  console.error("Login error:", error);
+  } catch (error) {
+    console.error("Login error:", error);
 
-  res.status(500).json({
-    message: "Login failed",
-    error: error.message,
-  });
-}
+    res.status(500).json({
+      message: "Login failed.",
+    });
   }
-);
-
+});
 
 export default router;
+
